@@ -33,6 +33,49 @@ This is a WiP and is used to test RK3588/RK3588s hardware features, use as is.
 
 to be completed.
 
+## Ethernet
+
+eth0 = 1 Gbps WLAN
+eth1 = 2.5 Gbps LAN0
+eth2 = 2.5 Gbps LAN1
+
+    eth0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+            ether 5a:1a:db:02:99:23  txqueuelen 1000  (Ethernet)
+            RX packets 0  bytes 0 (0.0 B)
+            RX errors 0  dropped 0  overruns 0  frame 0
+            TX packets 0  bytes 0 (0.0 B)
+            TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+            device interrupt 74  
+
+    eth1: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+            ether fe:a1:f3:98:92:b9  txqueuelen 1000  (Ethernet)
+            RX packets 0  bytes 0 (0.0 B)
+            RX errors 0  dropped 0  overruns 0  frame 0
+            TX packets 0  bytes 0 (0.0 B)
+            TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+            device interrupt 107  
+
+    eth2: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+            inet 192.168.254.10  netmask 255.255.0.0  broadcast 192.168.255.255
+            inet6 2804:7f4:3595:3a50:1a07:dcba:d14c:d298  prefixlen 64  scopeid 0x0<global>
+            inet6 fe80::a6fc:8d31:62bd:b390  prefixlen 64  scopeid 0x20<link>
+            ether 22:97:5b:c2:1a:67  txqueuelen 1000  (Ethernet)
+            RX packets 364  bytes 36157 (35.3 KiB)
+            RX errors 0  dropped 8  overruns 0  frame 0
+            TX packets 425  bytes 38398 (37.4 KiB)
+            TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+            device interrupt 117  
+
+    lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+            inet 127.0.0.1  netmask 255.0.0.0
+            inet6 ::1  prefixlen 128  scopeid 0x10<host>
+            loop  txqueuelen 1000  (Local Loopback)
+            RX packets 24  bytes 2564 (2.5 KiB)
+            RX errors 0  dropped 0  overruns 0  frame 0
+            TX packets 24  bytes 2564 (2.5 KiB)
+            TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+
 ## USB Camera Test
 
 H264 USB Camera test
