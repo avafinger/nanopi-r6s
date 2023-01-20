@@ -6,12 +6,15 @@ Table of Contents:
 
 - [Introduction](#introduction)
 - [Build Your Kernel](#build-your-kernel)
+- [Networking](#ethernet)
 - [USB Camera Test](#usb-camera-test)
   - [H264](#h264)
     - [Gstreamer pipeline H264](#gstreamer-pipeline-h264)
     - [Python Gstreamer code](#python-gstreamer-code)
   - [YUY2](#yuy2)
     - [Gstreamer pipeline YUY2](#gstreamer-pipeline-yuy2)
+  - [MJPEG](#mjpeg)
+    - [Gstreamer pipeline MJPEG](#gstreamer-pipeline-mjpeg)
 - [Hardware decoder](#hardware-decoding)
   - [Gstreamer](#gstreamer)
   - [FFmpeg](#ffmpeg)
@@ -36,8 +39,11 @@ to be completed.
 ## Ethernet
 
 eth0 = 1 Gbps WLAN
+
 eth1 = 2.5 Gbps LAN0
+
 eth2 = 2.5 Gbps LAN1
+
 
     eth0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
             ether 5a:1a:db:02:99:23  txqueuelen 1000  (Ethernet)
