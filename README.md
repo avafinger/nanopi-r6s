@@ -5,7 +5,9 @@ Debian 11 (11.6) with xfce (X11) for the NanoPi R6S base image for testing hardw
 Table of Contents:
 
 - [Introduction](#introduction)
-- [Build Your Kernel](#build-your-kernel)
+- [Board Storage Layout](#board-storage-layout)
+- [Build a Kernel](#build-kernel)
+- [Install Kernel](#install-kernel)
 - [Networking](#ethernet)
 - [USB Camera Test](#usb-camera-test)
   - [H264](#h264)
@@ -23,7 +25,8 @@ Table of Contents:
   - [SDL2 demo](#sdl2-demo)
   - [SDL3 demo](#sdl3-demo)
 - [Mini Router](#mini-router)
-- [Issues](#issues)
+- [Releases](#releases)
+- [Issues / Limitations](#issues)
 - [Acknowledgments](#acknowledgments)
 
 ## Introduction
@@ -32,17 +35,95 @@ The OS Image is "lean and mean", X11 (Debian 11.6) with Hardware Acceleration an
 You can load and run different kernels for testing.
 This is a WiP and is used to test RK3588/RK3588s hardware features, use as is.
 
+## Board Storage Layout
+
+|  storage |   type    |
+|----------|-----------|
+|  mmcblk0 |  sd card  |
+|  mmcblk2 |  eMMC 32G |
+
+
 ## Build Kernel
 
-to be completed.
+**build from kernel tree (CROSS-COMPILE recommended)**
+
+
+    # change accordingly
+    # your kernel config
+    export DTB=rk3588s-nanopi-r6s.dtb
+    export CONF="defconfig"
+    
+    # kernel directory
+    export KVD=$PWD
+    export SRC="output"
+    export DST="output"
+    export ARCH=arm64
+    export CROSS_COMPILE=aarch64-linux-gnu-
+    make ${CONF}
+    make -j8 INSTALL_MOD_PATH=output Image 
+    make -j8 INSTALL_MOD_PATH=output dtbs 
+    make -j8 INSTALL_MOD_PATH=output modules 
+    make -j8 INSTALL_MOD_PATH=output modules_install
+    KV=$(make -s kernelrelease)
+    echo $KV
+    make -j4 INSTALL_MOD_PATH=output INSTALL_HDR_PATH=output/usr/src/linux-headers-${KV} headers_install
+    echo $DST
+    echo $SRC
+    mkdir -p ${DST}/boot/dtbs/${KV}/rockchip/
+    cp -vf arch/arm64/boot/dts/rockchip/${DTB} ${DST}/boot/dtbs/${KV}/rockchip/${DTB}
+    cp -vf arch/arm64/boot/Image ${DST}/boot/Image_${KV}
+    rm ${DST}/lib/modules/${KV}/source
+    rm ${DST}/lib/modules/${KV}/build
+    mv ${DST}/lib ${DST}/usr/
+    tar -cvpzf kernel_$KV.tar.gz --directory=./output/ .
+
+
+## Install Kernel
+
+**install resulting tar.gz from cross-compiler**
+
+    sudo tar -xvpzf kernel_$KV.tar.gz -C /
+
+## Boot your new kernel
+
+The boot menu is in the file:
+
+    /boot/extlinux/extlinux.conf
+
+Add the new entry and make it default
+
+
+    timeout 10
+    menu title select kernel
+    DEFAULT mainline_kernel
+
+        label kernel-5.10.110-4G
+            kernel /Image_5.10.110-debugx
+            initrd /initrd.img
+            devicetreedir /dtbs/5.10.110-debugx
+            append earlyprintk console=ttyFIQ0,1500000n8 rw init=/sbin/init rootfstype=ext4 rootwait root=/dev/mmcblk0p2 net.ifnames=0 usbcore.autosuspend=-1 mem=4G
+
+        label kernel-5.10.110-debugx
+            kernel /Image_5.10.110-debugx
+            initrd /initrd.img
+            devicetreedir /dtbs/5.10.110-debugx
+            append earlyprintk console=ttyFIQ0,1500000n8 rw init=/sbin/init rootfstype=ext4 rootwait root=/dev/mmcblk0p2 net.ifnames=0 usbcore.autosuspend=-1
+
+        label mainline_kernel
+            kernel /Image_6.2.0-rc1
+            initrd /initrd.img
+            devicetreedir /dtbs/6.2.0-rc1
+            append earlyprintk console=ttyFIQ0,1500000n8 rw init=/sbin/init rootfstype=ext4 rootwait root=/dev/mmcblk0p2 net.ifnames=0 usbcore.autosuspend=-1
+
 
 ## Ethernet
 
-eth0 = 1 Gbps WLAN
+|  port  |   speed   | label |
+|--------|-----------|-------|
+|  eth0  |  1 Gbps   | WLAN  |
+|  eth1  |  2.5 Gbps | LAN0  |
+|  eth2  |  2.5 Gbps | LAN1  |
 
-eth1 = 2.5 Gbps LAN0
-
-eth2 = 2.5 Gbps LAN1
 
 
     eth0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
@@ -84,6 +165,10 @@ eth2 = 2.5 Gbps LAN1
 
 ## USB Camera Test
 
+USB Camera test with H264, YUY2, MJPEG pixel types
+
+## H264
+
 H264 USB Camera test
 ![H264 Display 1920x1080](https://raw.githubusercontent.com/avafinger/nanopi-r6s-debian11-xfce/main/nanopi-r6s-camera-h264.png)
 
@@ -121,6 +206,19 @@ to be completed.
 ## Mini Router
 
 to be completed.
+
+## Releases
+
+Releases will be available here:
+
+    https://github.com/avafinger/nanopi-r6s-debian11-xfce/releases
+    
+* **v1**
+  
+  **v1** is the raw OS image we will use to boot up linux and install OS image with tar.gz files and flash the **v2** OS Image to the eMMC device.
+  
+  https://github.com/avafinger/nanopi-r6s-debian11-xfce/releases/tag/v1
+  
 
 ## Issues
 
