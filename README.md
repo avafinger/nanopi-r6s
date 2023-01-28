@@ -1,4 +1,4 @@
-## nanopi-r6s-debian11-xcfe-minimal experimental image
+# nanopi-r6s-debian11-xcfe-minimal experimental image
 
 Debian 11 (11.6) with xfce (X11) for the NanoPi R6S base image for testing hardware functionality and debugging.
 
@@ -163,9 +163,9 @@ Add the new entry and make it default
             TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 
 
-## USB Camera Test
+# USB Camera Test
 
-USB Camera test with H264, YUY2, MJPEG pixel types
+USB Camera test with **H264**, **YUY2**, **MJPEG** pixel formats
 
 ## H264
 
@@ -175,7 +175,11 @@ H264 USB Camera test
 The H264 camera used for the test is the HVBCAM-1710, 1920x1080 H264 30 fps.
 The H264 frame is decoded and displayed with gstreamer.
 
-gstreamer pipeline:
+## Gstreamer pipeline H264
+
+USB camera with H264 frames.
+
+*gstreamer pipeline:*
 
     GST_GL_API=gles2 GST_GL_PLATFORM=egl gst-launch-1.0 v4l2src device=/dev/video2 ! video/x-h264,width=1920,height=1080,framerate=30/1 ! h264parse ! mppvideodec ! glimagesink
 
@@ -184,20 +188,53 @@ H264 USB Camera + MJPEG camera test on 4K display
 
 ![Stressing USB2.0 with H264 + MJPEG Camera + 4K Display](https://raw.githubusercontent.com/avafinger/nanopi-r6s-debian11-xfce/main/4k_cam1.png)
 
+## MJPEG
+
+USB camera with MJPEG frames.
+
 gstreamer pipeline for the MJPEG (720 HD):
 
     GST_GL_API=gles2 GST_GL_PLATFORM=egl gst-launch-1.0 v4l2src device=/dev/video6 ! image/jpeg,width=1280,height=720,framerate=30/1 ! mppjpegdec ! glimagesink
 
 
+## YUY2
+
+USB camera with YUYV frames.
+
 to be completed.
 
 ## Hardware decoder
 
-to be completed.
+* **Gstreamer**
+
+  Hardware decoding is possible with gstreamer for some formats. Decoding HEVC 10-bit failed with gstreamer.
+
+* **FFMpeg**
+
+  FFmpeg fails if RAM is greater than 4G. If you want to use Hardware decoding you must limit **RAM** access to **4G**.
+  
+  Edit extlinux.conf and add a new entry like this one called multimedia:
+
+        timeout 10
+        menu title select kernel
+        DEFAULT multimedia
+
+        label kernel-5.10.110-debugx
+            kernel /Image_5.10.110-debugx
+            initrd /initrd.img
+            devicetreedir /dtbs/5.10.110-debugx
+            append earlyprintk console=ttyFIQ0,1500000n8 rw init=/sbin/init rootfstype=ext4 rootwait root=/dev/mmcblk0p2 net.ifnames=0 usbcore.autosuspend=-1
+
+        label multimedia
+            kernel /Image_5.10.110-debugx
+            initrd /initrd.img
+            devicetreedir /dtbs/5.10.110-debugx
+            append earlyprintk console=ttyFIQ0,1500000n8 rw init=/sbin/init rootfstype=ext4 rootwait root=/dev/mmcblk0p2 net.ifnames=0 usbcore.autosuspend=-1 mem=4G
+
 
 ## Hardware encoder
 
-to be completed.
+Hardware encoding is only avaiable in Gstreamer.
 
 ## Rockchip NPU
 
@@ -225,66 +262,76 @@ Releases will be available here:
   
   https://github.com/avafinger/nanopi-r6s-debian11-xfce/releases/tag/v2
   
-  **Write it to eMMC**
+  **Burn it to eMMC**
 
-```
-## change to directory where the files were unzipped
-cd img
-sudo su
-export emmc=/dev/mmcblk2
-export part_position=16384   # KiB
-export boot_size=120          # MiB
-umount ${emmc}
-umount ${emmc}p1
-umount ${emmc}p2
-# Create beginning of disk
-dd if=/dev/zero bs=1M count=$((part_position/1024)) of="$emmc"
-sync
-sleep 2
-echo -e "\ng\nn\n1\n32768\n+512M\nt\n1\nn\n\n\n\nw" | fdisk ${emmc}
-sync
-sleep 2
-echo -e "\nx\nn\n1\nuboot\nr\nw" | fdisk ${emmc}
-sleep 2
-sync
-sleep 1
-## boot loader
-dd if=./idbloader.img of=${emmc} seek=64 conv=notrunc
-sleep 1
-sync
-dd if=./u-boot.itb of=${emmc} seek=16384 conv=notrunc
-sleep 2
-sync
-## format partition
-mkfs.fat -F32 -n boot ${emmc}p1
-sync
-sleep 3
-mkfs.ext4 -F -b 4096 -E stride=2,stripe-width=1024 -L rootfs ${emmc}p2
-sync
-sleep 3
-mkdir eboot
-mount ${emmc}p1 ./eboot
-sleep 1
-tar -xvpzf boot_debian11_xfce_emmc_nanopi-r6s.tar.gz -C ./eboot
-sleep 3
-sync
-mkdir erootfs
-mount ${emmc}p2 ./erootfs
-sleep 1
-sync
-tar -xvpzf rootfs_debian11_xfce_emmc_nanopi-r6s.tar.gz -C ./erootfs --numeric-ow
-sleep 5
-sync
-sleep 1
-umount ./eboot
-umount ./erootfs
-sync
-sleep 1
-```
+    ```
+    ## change to directory where the files were unzipped
+    cd img
+    sudo su
+    export emmc=/dev/mmcblk2
+    export part_position=16384   # KiB
+    export boot_size=120          # MiB
+    umount ${emmc}
+    umount ${emmc}p1
+    umount ${emmc}p2
+    # Create beginning of disk
+    dd if=/dev/zero bs=1M count=$((part_position/1024)) of="$emmc"
+    sync
+    sleep 2
+    echo -e "\ng\nn\n1\n32768\n+512M\nt\n1\nn\n\n\n\nw" | fdisk ${emmc}
+    sync
+    sleep 2
+    echo -e "\nx\nn\n1\nuboot\nr\nw" | fdisk ${emmc}
+    sleep 2
+    sync
+    sleep 1
+    ## boot loader
+    dd if=./idbloader.img of=${emmc} seek=64 conv=notrunc
+    sleep 1
+    sync
+    dd if=./u-boot.itb of=${emmc} seek=16384 conv=notrunc
+    sleep 2
+    sync
+    ## format partition
+    mkfs.fat -F32 -n boot ${emmc}p1
+    sync
+    sleep 3
+    mkfs.ext4 -F -b 4096 -E stride=2,stripe-width=1024 -L rootfs ${emmc}p2
+    sync
+    sleep 3
+    mkdir eboot
+    mount ${emmc}p1 ./eboot
+    sleep 1
+    tar -xvpzf boot_debian11_xfce_emmc_nanopi-r6s.tar.gz -C ./eboot
+    sleep 3
+    sync
+    mkdir erootfs
+    mount ${emmc}p2 ./erootfs
+    sleep 1
+    sync
+    tar -xvpzf rootfs_debian11_xfce_emmc_nanopi-r6s.tar.gz -C ./erootfs --numeric-ow
+    sleep 5
+    sync
+    sleep 1
+    # unmount
+    umount ./eboot
+    umount ./erootfs
+    sync
+    sleep 1
+    ```
 
-## Issues
+  Turn off the board with the command:
+
+      shutdown -h now
+
+  Remove the SD card
+  Turn ON the board, now you are booting from **eMMC**
+
+## Issues / Limitations
 
 RGA breaks for some pixel formats and force FFmpeg to use software rendering.
+Gstreamer breaks RGA if decoding 10-bit videos.
+FFmpeg can't address memory greater than 4G.
 
 ## Acknowledgments
 
