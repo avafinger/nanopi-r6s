@@ -265,14 +265,14 @@ sleep 3
 mkdir eboot
 mount ${emmc}p1 ./eboot
 sleep 1
-tar -xvpzf boot_debian11_nanopi-r6s.tar.gz -C ./eboot
+tar -xvpzf boot_debian11_xfce_emmc_nanopi-r6s.tar.gz -C ./eboot
 sleep 3
 sync
 mkdir erootfs
 mount ${emmc}p2 ./erootfs
 sleep 1
 sync
-tar -xvpzf rootfs_debian11_xcfe_nanopi-r6s.tar.gz -C ./erootfs --numeric-ow
+tar -xvpzf rootfs_debian11_xfce_emmc_nanopi-r6s.tar.gz -C ./erootfs --numeric-ow
 sleep 5
 sync
 sleep 1
