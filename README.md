@@ -218,7 +218,69 @@ Releases will be available here:
   **v1** is the raw OS image we will use to boot up linux and install OS image with tar.gz files and flash the **v2** OS Image to the eMMC device.
   
   https://github.com/avafinger/nanopi-r6s-debian11-xfce/releases/tag/v1
+
+* **v2**
   
+  **v2** is the Debian 11 X11 firmware image to be installed into eMMC device.
+  
+  https://github.com/avafinger/nanopi-r6s-debian11-xfce/releases/tag/v2
+  
+  **Write it to eMMC**
+
+```
+## change to directory where the files were unzipped
+cd img
+sudo su
+export emmc=/dev/mmcblk2
+export part_position=16384   # KiB
+export boot_size=120          # MiB
+umount ${emmc}
+umount ${emmc}p1
+umount ${emmc}p2
+# Create beginning of disk
+dd if=/dev/zero bs=1M count=$((part_position/1024)) of="$emmc"
+sync
+sleep 2
+echo -e "\ng\nn\n1\n32768\n+512M\nt\n1\nn\n\n\n\nw" | fdisk ${emmc}
+sync
+sleep 2
+echo -e "\nx\nn\n1\nuboot\nr\nw" | fdisk ${emmc}
+sleep 2
+sync
+sleep 1
+## boot loader
+dd if=./idbloader.img of=${emmc} seek=64 conv=notrunc
+sleep 1
+sync
+dd if=./u-boot.itb of=${emmc} seek=16384 conv=notrunc
+sleep 2
+sync
+## format partition
+mkfs.fat -F32 -n boot ${emmc}p1
+sync
+sleep 3
+mkfs.ext4 -F -b 4096 -E stride=2,stripe-width=1024 -L rootfs ${emmc}p2
+sync
+sleep 3
+mkdir eboot
+mount ${emmc}p1 ./eboot
+sleep 1
+tar -xvpzf boot_debian11_nanopi-r6s.tar.gz -C ./eboot
+sleep 3
+sync
+mkdir erootfs
+mount ${emmc}p2 ./erootfs
+sleep 1
+sync
+tar -xvpzf rootfs_debian11_xcfe_nanopi-r6s.tar.gz -C ./erootfs --numeric-ow
+sleep 5
+sync
+sleep 1
+umount ./eboot
+umount ./erootfs
+sync
+sleep 1
+```
 
 ## Issues
 
