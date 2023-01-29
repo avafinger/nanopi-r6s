@@ -1,4 +1,4 @@
-# nanopi-r6s-debian11-xcfe-minimal experimental image
+# NanoPi R6S
 
 Debian 11 (11.6) with xfce (X11) for the NanoPi R6S base image for testing hardware functionality and debugging.
 
@@ -17,7 +17,7 @@ Table of Contents:
     - [Gstreamer pipeline YUY2](#gstreamer-pipeline-yuy2)
   - [MJPEG](#mjpeg)
     - [Gstreamer pipeline MJPEG](#gstreamer-pipeline-mjpeg)
-- [Hardware decoder](#hardware-decoding)
+- [Hardware decoder](#hardware-decoder)
   - [Gstreamer](#gstreamer)
   - [FFmpeg](#ffmpeg)
 - [Hardware encoder](#hardware-encoding)
@@ -199,9 +199,10 @@ gstreamer pipeline for the MJPEG (720 HD):
 
 ## YUY2
 
-USB camera with YUYV frames.
+USB camera with YUY2 frames.
 
-to be completed.
+    sudo GST_GL_API=gles2 GST_GL_PLATFORM=egl gst-launch-1.0 v4l2src device=/dev/video0 io-mode=dmabuf ! video/x-raw,format=YUY2,width=640,height=480 ! glimagesink
+
 
 ## Hardware decoder
 
