@@ -26,7 +26,8 @@ Table of Contents:
   - [SDL3 demo](#sdl3-demo)
 - [Mini Router](#mini-router)
 - [Releases](#releases)
-- [Issues / Limitations](#issues)
+- [Fix](#fix)
+- [Issues / Limitations](#issues--limitations)
 - [Acknowledgments](#acknowledgments)
 
 ## Introduction
@@ -327,12 +328,23 @@ Releases will be available here:
 
   Remove the SD card
   Turn ON the board, now you are booting from **eMMC**
+  
+## Fix
+
+* Fix ffmpeg by editing extlinux.conf and adding mem=4G
+* Fix sdl2.pc file
+
+    Fix the file: /usr/lib/aarch64-linux-gnu/pkgconfig/sdl2.pc by removing @PKG_CONFIG_LIBS_PRIV@
+
+      Libs: -L${libdir} -lSDL2 @PKG_CONFIG_LIBS_PRIV@ -lm -ldl -lasound -lm -ldl -lpthread -lpulse-simple -lpulse -lX11 -lXext -lXcursor -lXinerama -lXi -lXfixes -lXrandr -lXss -lXxf86vm -ldrm -lgbm -lpthread -lrt
+
+
 
 ## Issues / Limitations
 
-RGA breaks for some pixel formats and force FFmpeg to use software rendering.
-Gstreamer breaks RGA if decoding 10-bit videos.
-FFmpeg can't address memory greater than 4G.
+* RGA breaks for some pixel formats and force FFmpeg to use software rendering.
+* Gstreamer breaks RGA if decoding 10-bit videos.
+* FFmpeg can't address memory greater than 4G.
 
 ## Acknowledgments
 
