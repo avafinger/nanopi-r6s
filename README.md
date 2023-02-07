@@ -338,6 +338,9 @@ Releases will be available here:
 
       Libs: -L${libdir} -lSDL2 @PKG_CONFIG_LIBS_PRIV@ -lm -ldl -lasound -lm -ldl -lpthread -lpulse-simple -lpulse -lX11 -lXext -lXcursor -lXinerama -lXi -lXfixes -lXrandr -lXss -lXxf86vm -ldrm -lgbm -lpthread -lrt
 
+* Fix automount user permissions
+
+      sudo chown rock:rock -R /media/
 
 
 ## Issues / Limitations
