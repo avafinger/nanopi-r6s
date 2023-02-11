@@ -85,6 +85,10 @@ This is a WiP and is used to test RK3588/RK3588s hardware features, use as is.
 
     sudo tar -xvpzf kernel_$KV.tar.gz -C /
 
+ignore the warning/error:
+    
+    tar: Exiting with failure status due to previous errors
+    
 ## Boot your new kernel
 
 The boot menu is in the file:
