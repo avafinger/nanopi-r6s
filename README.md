@@ -353,6 +353,10 @@ Releases will be available here:
 
     http://ix.io/4nN2
     
+**sudo ./sbc-bench.sh -r**
+
+    http://ix.io/4nNc
+    
 ## Issues / Limitations
 
 * RGA breaks for some pixel formats and force FFmpeg to use software rendering.
