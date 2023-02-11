@@ -27,6 +27,7 @@ Table of Contents:
 - [Mini Router](#mini-router)
 - [Releases](#releases)
 - [Fix](#fix)
+- [Benchmark](#benchmark)
 - [Issues / Limitations](#issues--limitations)
 - [Acknowledgments](#acknowledgments)
 
@@ -346,7 +347,12 @@ Releases will be available here:
 
       sudo chown rock:rock -R /media/
 
+## Benchmark
 
+**sbc-bench v0.9.17**
+
+    http://ix.io/4nN2
+    
 ## Issues / Limitations
 
 * RGA breaks for some pixel formats and force FFmpeg to use software rendering.
