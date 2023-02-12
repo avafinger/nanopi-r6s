@@ -336,16 +336,20 @@ Releases will be available here:
   
 ## Fix
 
-* Fix ffmpeg by editing extlinux.conf and adding mem=4G
-* Fix sdl2.pc file
+* Fix: ffmpeg by editing extlinux.conf and adding mem=4G
+* Fix: sdl2.pc file
 
     Fix the file: /usr/lib/aarch64-linux-gnu/pkgconfig/sdl2.pc by removing @PKG_CONFIG_LIBS_PRIV@
 
       Libs: -L${libdir} -lSDL2 @PKG_CONFIG_LIBS_PRIV@ -lm -ldl -lasound -lm -ldl -lpthread -lpulse-simple -lpulse -lX11 -lXext -lXcursor -lXinerama -lXi -lXfixes -lXrandr -lXss -lXxf86vm -ldrm -lgbm -lpthread -lrt
 
-* Fix automount user permissions
+* Fix: automount user permissions
 
       sudo chown rock:rock -R /media/
+      
+* Fix: small improvment
+
+      append earlyprintk console=ttyFIQ0,1500000n8 rw init=/sbin/init rootfstype=ext4 rootwait root=/dev/mmcblk0p2 net.ifnames=0 usbcore.autosuspend=-1 irqchip.gicv3_pseudo_nmi=0 coherent_pool=2M
 
 ## Benchmark
 
