@@ -126,9 +126,9 @@ Add the new entry and make it default
 
 |  port  |   speed   | label |
 |--------|-----------|-------|
-|  eth0  |  1 Gbps   | WLAN  |
-|  eth1  |  2.5 Gbps | LAN0  |
-|  eth2  |  2.5 Gbps | LAN1  |
+|  eth0  |  1 Gbps   | LAN0  |
+|  eth1  |  2.5 Gbps | LAN1  |
+|  eth2  |  2.5 Gbps | WLAN  |
 
 
 
