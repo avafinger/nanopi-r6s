@@ -26,7 +26,7 @@ Table of Contents:
   - [SDL3 demo](#sdl3-demo)
 - [Mini Router](#mini-router)
 - [Releases](#releases)
-- [Fix](#fix)
+- [Some Fixes](#fix)
 - [Benchmark](#benchmark)
 - [Issues / Limitations](#issues--limitations)
 - [Acknowledgments](#acknowledgments)
@@ -350,6 +350,12 @@ Releases will be available here:
 * Fix: small improvment
 
       append earlyprintk console=ttyFIQ0,1500000n8 rw init=/sbin/init rootfstype=ext4 rootwait root=/dev/mmcblk0p2 net.ifnames=0 usbcore.autosuspend=-1 irqchip.gicv3_pseudo_nmi=0 coherent_pool=2M
+      
+      
+* Fix: don't use dmabuf for YUY2 on gstreamer
+
+    GST_GL_API=gles2 GST_GL_PLATFORM=egl gst-launch-1.0 v4l2src device=/dev/video0 io-mode=3 ! video/x-raw,format=YUY2,width=640,height=480 ! glimagesink
+
 
 ## Benchmark
 
