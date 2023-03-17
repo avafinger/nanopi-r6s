@@ -1,6 +1,6 @@
 # NanoPi R6S
 
-Debian 11 (11.6) with xfce (X11) for the NanoPi R6S base image for testing hardware functionality and debugging.
+Debian 11 (11.6) with xfce4 (X11) and Ubuntu 22.04 for the NanoPi R6S base image for testing hardware functionality and debugging.
 
 Table of Contents:
 
@@ -357,6 +357,9 @@ Releases will be available here:
     GST_GL_API=gles2 GST_GL_PLATFORM=egl gst-launch-1.0 v4l2src device=/dev/video0 io-mode=3 ! video/x-raw,format=YUY2,width=640,height=480 ! glimagesink
 
 
+* Fix: New Kernel and FFmpeg decoding with 8GB / 16GB DRAM on Ubuntu 22.04
+
+
 ## Benchmark
 
 **sbc-bench v0.9.17**
@@ -369,9 +372,9 @@ Releases will be available here:
     
 ## Issues / Limitations
 
-* RGA breaks for some pixel formats and force FFmpeg to use software rendering.
+*  ~~RGA breaks for some pixel formats and force FFmpeg to use software rendering~~.
 * Gstreamer breaks RGA if decoding 10-bit videos.
-* FFmpeg can't address memory greater than 4G.
+*  ~~FFmpeg can't address memory greater than 4G ~~.
 
 ## Acknowledgments
 
