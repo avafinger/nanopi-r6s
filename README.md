@@ -374,7 +374,7 @@ Releases will be available here:
 
 *  ~~RGA breaks for some pixel formats and force FFmpeg to use software rendering~~.
 * Gstreamer breaks RGA if decoding 10-bit videos.
-*  ~~FFmpeg can't address memory greater than 4G ~~.
+*  ~~FFmpeg can't address memory greater than 4G~~.
 
 ## Acknowledgments
 
